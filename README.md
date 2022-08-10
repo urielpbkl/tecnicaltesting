@@ -10,7 +10,7 @@ To install follow next steps:
 
 -**WINDOWS**
 
-``` python -m venv .venv ```
+``` virtualenv env ```
 
 ### 2) Install dependencies.
 
