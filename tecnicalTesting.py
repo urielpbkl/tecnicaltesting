@@ -2,9 +2,12 @@ import requests
 import pandas as pd
 from time import time
 import hashlib
-import json
 import json as JSON
 import sqlite3
+import os
+
+
+DIR = os.path.dirname(os.path.abspath(__file__))
 
 def request():
     url = 'https://restcountries.com/v2/all'
@@ -33,7 +36,7 @@ def createDataFrame():
       region.append(raw_data[count]['region'])
       city_name.append(raw_data[count]['name'])
       lenguajes.append(convert_to_hash(raw_data[count]['languages'][0]['name']))
-      elapsed_time = f'{(time() - start_time) * 1000:.3f}' 
+      elapsed_time = f'{(time() - start_time) * 1000:.4f}' 
       time_ejecution.append(float(elapsed_time))
     
     
@@ -55,14 +58,12 @@ def showData():
 
 def dataToSQLite():
     df = createDataFrame()
-    conn = sqlite3.connect('base.db')
+    conn = sqlite3.connect(rf'{DIR}\base.db')
     c = conn.cursor()
     c.execute('CREATE TABLE IF NOT EXISTS data_table(region	TEXT, city_name	TEXT,languaje	TEXT,time TEXT)')
     conn.commit()
     df.to_sql('data_table', conn, if_exists='replace', index = False)
     
-
-dataToSQLite()
     
 def dataToJSON():
     df = createDataFrame()
